@@ -4,31 +4,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Insurance Voice-to-Text</title>
+  <title>Britam Insurance | Voice-to-Text</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="icons/icon-192.png">
-  <meta name="theme-color" content="#2563eb"/>
+  <meta name="theme-color" content="#005BAC"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; max-width: 800px; margin: auto; }
-    h1 { font-size: 1.8rem; margin-bottom: 10px; text-align: center; }
-    section { margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-    section h2 { font-size: 1.2rem; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-    label { display: block; margin: 8px 0 4px; font-weight: bold; }
-    input, select, textarea, button {
-      width: 100%; padding: 10px; font-size: 1rem;
-      border: 1px solid #ccc; border-radius: 6px;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
     }
-    button { margin-top: 10px; background-color: #2563eb; color: white; cursor: pointer; border: none; }
-    #stop { background-color: #dc2626; }
-    #transcript { margin-top: 20px; padding: 15px; background: #fff; border-radius: 10px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 150px; white-space: pre-wrap; }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #005BAC;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 15px auto;
+      max-width: 150px;
+    }
+    section {
+      margin-bottom: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    section h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+      color: #005BAC;
+    }
+    label {
+      display: block;
+      margin: 8px 0 4px;
+      font-weight: bold;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 10px;
+      background-color: #005BAC;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    #stop {
+      background-color: #dc2626;
+    }
+    #transcript {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      min-height: 150px;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
 
-<h1>📝 Insurance Voice-to-Text Tool</h1>
-<p style="text-align: center;">Choose report type, fill details and start recording.</p>
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Britam_Logo.png" alt="Britam Logo" class="logo" />
+<h1>Britam Voice-to-Text Tool</h1>
+<p style="text-align: center;">Generate Risk Assessment and Claims Reports with AI transcription</p>
 
 <section>
   <h2>Report Details</h2>
@@ -134,7 +185,7 @@ function getFields() {
 
 function generateContent(fields) {
   const today = new Date().toLocaleDateString();
-  const header = `BRITAM Insurance Company Uganda Limited\n${fields.type === 'risk' ? 'Risk Assessment Report' : 'Claims Evaluation Report'}\nDate: ${today}\nPrepared by: ${fields.assessorName} (ID: ${fields.assessorID})\n\n`;
+  const header = `Britam Insurance Company Uganda Limited\n${fields.type === 'risk' ? 'Risk Assessment Report' : 'Claims Evaluation Report'}\nDate: ${today}\nPrepared by: ${fields.assessorName} (ID: ${fields.assessorID})\n\n`;
   const details = `Policy Number: ${fields.policyNo}\nEndorsement Number: ${fields.endorsementNo}\nClient: ${fields.clientName}\nEmail: ${fields.clientEmail}\nAddress: ${fields.clientAddress}\nContact: ${fields.clientContact}\n\n`;
   const body = fields.type === 'risk' ? 'Assessment Observations:' : 'Claim Details:';
   return header + details + body + '\n' + fields.transcript + '\n\nSignature: _________________________';
