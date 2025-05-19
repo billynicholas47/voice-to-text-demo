@@ -7,54 +7,102 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="icons/icon-192.png">
   <meta name="theme-color" content="#2563eb"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; text-align: center; }
-    h1 { font-size: 1.5rem; margin-bottom: 10px; }
-    select, button {
-      width: 90%; max-width: 300px; padding: 15px; font-size: 1rem; margin: 10px auto;
-      border: none; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      padding: 20px;
+      text-align: center;
     }
-    button { background-color: #2563eb; color: white; cursor: pointer; }
-    #stop { background-color: #dc2626; }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    select, button {
+      width: 90%;
+      max-width: 300px;
+      padding: 15px;
+      font-size: 1rem;
+      margin: 10px auto;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+    #stop {
+      background-color: #dc2626;
+    }
     #transcript {
-      margin-top: 20px; padding: 15px; background: #fff; border-radius: 10px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 150px; width: 90%;
-      max-width: 600px; margin-left: auto; margin-right: auto; white-space: pre-wrap;
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      min-height: 150px;
+      width: 90%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
+
   <h1>🎤 Voice to Text</h1>
   <p>Select a language and tap Start to begin.</p>
+
   <select id="language">
     <option value="en-US">English (US)</option>
     <option value="sw-TZ">Swahili (Tanzania)</option>
     <option value="lg-UG">Luganda (Uganda)</option>
   </select>
+
   <br/>
+
   <button id="start">Start Recording</button>
   <button id="stop">Stop Recording</button>
+  <button onclick="downloadPDF()">Export as PDF</button>
+  <button onclick="downloadWord()">Export as Word</button>
+
   <div id="transcript"></div>
+
   <script>
     const startBtn = document.getElementById('start');
     const stopBtn = document.getElementById('stop');
     const transcriptDiv = document.getElementById('transcript');
     const languageSelector = document.getElementById('language');
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) alert('Sorry, your browser does not support Speech Recognition.');
+
+    if (!SpeechRecognition) {
+      alert('Sorry, your browser does not support Speech Recognition.');
+    }
+
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
+
     let finalTranscript = '';
+
     recognition.onresult = (event) => {
       let interimTranscript = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) finalTranscript += transcript + '\n';
-        else interimTranscript += transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + '\n';
+        } else {
+          interimTranscript += transcript;
+        }
       }
       transcriptDiv.textContent = finalTranscript + interimTranscript;
     };
+
     startBtn.onclick = () => {
       const selectedLang = languageSelector.value;
       if (selectedLang === "lg-UG") {
@@ -64,7 +112,35 @@
       recognition.lang = selectedLang;
       recognition.start();
     };
-    stopBtn.onclick = () => recognition.stop();
+
+    stopBtn.onclick = () => {
+      recognition.stop();
+    };
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const text = document.getElementById("transcript").textContent;
+      const lines = doc.splitTextToSize(text, 180);
+      doc.text(lines, 10, 10);
+      doc.save("transcript.pdf");
+    }
+
+    function downloadWord() {
+      const text = document.getElementById("transcript").textContent;
+      const header = `<!DOCTYPE html><html><head><meta charset='utf-8'></head><body><pre>`;
+      const footer = `</pre></body></html>`;
+      const blob = new Blob([header + text + footer], {
+        type: 'application/msword'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'transcript.doc';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   </script>
+
 </body>
 </html>
