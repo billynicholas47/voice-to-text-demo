@@ -10,50 +10,81 @@
   <meta name="theme-color" content="#2563eb"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; text-align: center; }
-    h1 { font-size: 1.5rem; margin-bottom: 10px; }
-    select, input, textarea, button {
-      width: 90%; max-width: 400px; padding: 10px; margin: 8px auto; display: block;
-      font-size: 1rem; border: 1px solid #ccc; border-radius: 6px;
+    body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; max-width: 800px; margin: auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 10px; text-align: center; }
+    section { margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    section h2 { font-size: 1.2rem; margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+    label { display: block; margin: 8px 0 4px; font-weight: bold; }
+    input, select, textarea, button {
+      width: 100%; padding: 10px; font-size: 1rem;
+      border: 1px solid #ccc; border-radius: 6px;
     }
-    button { background-color: #2563eb; color: white; cursor: pointer; border: none; }
+    button { margin-top: 10px; background-color: #2563eb; color: white; cursor: pointer; border: none; }
     #stop { background-color: #dc2626; }
     #transcript { margin-top: 20px; padding: 15px; background: #fff; border-radius: 10px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 150px; max-width: 600px;
-      margin-left: auto; margin-right: auto; white-space: pre-wrap; }
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-height: 150px; white-space: pre-wrap; }
   </style>
 </head>
 <body>
 
 <h1>📝 Insurance Voice-to-Text Tool</h1>
-<p>Choose report type, fill details and start recording.</p>
+<p style="text-align: center;">Choose report type, fill details and start recording.</p>
 
-<select id="reportType">
-  <option value="risk">Risk Assessment Report</option>
-  <option value="claims">Claims Evaluation Report</option>
-</select>
+<section>
+  <h2>Report Details</h2>
+  <label for="reportType">Report Type</label>
+  <select id="reportType">
+    <option value="risk">Risk Assessment Report</option>
+    <option value="claims">Claims Evaluation Report</option>
+  </select>
+  <label for="language">Language</label>
+  <select id="language">
+    <option value="en-US">English (US)</option>
+    <option value="sw-TZ">Swahili (Tanzania)</option>
+    <option value="lg-UG">Luganda (Uganda)</option>
+  </select>
+</section>
 
-<input type="text" id="policyNo" placeholder="Policy Number">
-<input type="text" id="endorsementNo" placeholder="Endorsement Number">
-<input type="text" id="clientName" placeholder="Client Name">
-<input type="email" id="clientEmail" placeholder="Client Email">
-<input type="text" id="clientAddress" placeholder="Client Address">
-<input type="text" id="clientContact" placeholder="Client Contact">
-<input type="text" id="assessorName" placeholder="Assessor Name">
-<input type="text" id="assessorID" placeholder="Assessor ID">
+<section>
+  <h2>Policy & Client Details</h2>
+  <label for="policyNo">Policy Number</label>
+  <input type="text" id="policyNo">
+  <label for="endorsementNo">Endorsement Number</label>
+  <input type="text" id="endorsementNo">
+  <label for="clientName">Client Name</label>
+  <input type="text" id="clientName">
+  <label for="clientEmail">Client Email</label>
+  <input type="email" id="clientEmail">
+  <label for="clientAddress">Client Address</label>
+  <input type="text" id="clientAddress">
+  <label for="clientContact">Client Contact</label>
+  <input type="text" id="clientContact">
+</section>
 
-<select id="language">
-  <option value="en-US">English (US)</option>
-  <option value="sw-TZ">Swahili (Tanzania)</option>
-  <option value="lg-UG">Luganda (Uganda)</option>
-</select>
+<section>
+  <h2>Assessor Details</h2>
+  <label for="assessorName">Assessor Name</label>
+  <input type="text" id="assessorName">
+  <label for="assessorID">Assessor ID</label>
+  <input type="text" id="assessorID">
+</section>
 
-<button id="start">Start Recording</button>
-<button id="stop">Stop Recording</button>
-<button onclick="downloadPDF()">Export as PDF</button>
-<button onclick="downloadWord()">Export as Word</button>
+<section>
+  <h2>Voice Recording</h2>
+  <button id="start">Start Recording</button>
+  <button id="stop">Stop Recording</button>
+</section>
 
-<div id="transcript"></div>
+<section>
+  <h2>Transcript</h2>
+  <div id="transcript"></div>
+</section>
+
+<section>
+  <h2>Export</h2>
+  <button onclick="downloadPDF()">Export as PDF</button>
+  <button onclick="downloadWord()">Export as Word</button>
+</section>
 
 <script>
 const startBtn = document.getElementById('start');
